@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎮 MINI GAME Arcade</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ===== LOADING SCREEN ===== -->
+<div id="loading-screen">
+  <div class="loading-content">
+    <div class="loading-logo">🎮</div>
+    <h1 class="loading-title">MINI GAME</h1>
+    <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
+    <p class="loading-text" id="loading-text">Memuat game...</p>
+  </div>
+  <div class="loading-particles" id="loading-particles"></div>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-logo" onclick="showPage('home')">🎮 <span>MINI GAME</span></div>
+  <div class="nav-actions">
+    <button class="nav-btn" id="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light">🌙</button>
+    <button class="nav-btn" id="music-toggle" onclick="toggleMusic()" title="Toggle Music">🔇</button>
+  </div>
+</nav>
+
+<!-- ===== HOME PAGE ===== -->
+<div id="page-home" class="page active">
+  <div class="hero-section">
+    <div class="hero-bg-anim"></div>
+    <h1 class="hero-title">🎮 MINI GAME</h1>
+    <p class="hero-sub">Pilih game favoritmu dan mulai bermain!</p>
+    <div class="floating-emojis" id="floating-emojis"></div>
+  </div>
+  <div class="games-grid" id="games-grid">
+    <div class="game-card" onclick="showPage('memory'); playClick()" data-game="memory">
+      <div class="card-glow"></div>
+      <div class="card-icon">🧠</div>
+      <h3>Memory Game</h3>
+      <p>Temukan pasangan kartu yang sama!</p>
+      <div class="card-badge">Classic</div>
+    </div>
+    <div class="game-card" onclick="showPage('tictactoe'); playClick()" data-game="tictactoe">
+      <div class="card-glow"></div>
+      <div class="card-icon">❌</div>
+      <h3>Tic Tac Toe</h3>
+      <p>Tantang teman atau lawan bot AI!</p>
+      <div class="card-badge">2 Player</div>
+    </div>
+    <div class="game-card" onclick="showPage('tebakangka'); playClick()" data-game="tebakangka">
+      <div class="card-glow"></div>
+      <div class="card-icon">🔢</div>
+      <h3>Tebak Angka</h3>
+      <p>Tebak angka yang tepat dalam batas nyawa!</p>
+      <div class="card-badge">Puzzle</div>
+    </div>
+    <div class="game-card" onclick="showPage('rps'); playClick()" data-game="rps">
+      <div class="card-glow"></div>
+      <div class="card-icon">✊</div>
+      <h3>Rock Paper Scissors</h3>
+      <p>Adu keberuntungan melawan bot!</p>
+      <div class="card-badge">Battle</div>
+    </div>
+    <div class="game-card" onclick="showPage('snake'); playClick()" data-game="snake">
+      <div class="card-glow"></div>
+      <div class="card-icon">🐍</div>
+      <h3>Snake Game</h3>
+      <p>Makan semua makanan tanpa menabrak!</p>
+      <div class="card-badge">Classic</div>
+    </div>
+    <div class="game-card" onclick="showPage('catch'); playClick()" data-game="catch">
+      <div class="card-glow"></div>
+      <div class="card-icon">🍎</div>
+      <h3>Catch The Object</h3>
+      <p>Tangkap buah, hindari bom!</p>
+      <div class="card-badge">Action</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MEMORY GAME PAGE ===== -->
+<div id="page-memory" class="page">
+  <div class="game-header">
+    <button class="back-btn" onclick="showPage('home'); playClick()">← Back</button>
+    <h2>🧠 Memory Game</h2>
+    <div class="game-stats">
+      <span>⏱️ <span id="mem-timer">0</span>s</span>
+      <span>👆 <span id="mem-moves">0</span></span>
+      <span>🏆 <span id="mem-best">--</span></span>
+    </div>
+  </div>
+  <div class="level-select" id="mem-level-select">
+    <h3>Pilih Level</h3>
+    <div class="level-btns">
+      <button class="level-btn active" onclick="startMemory(2,2,'Mudah')" data-level="easy">😊 Mudah<br><small>2×2</small></button>
+      <button class="level-btn" onclick="startMemory(4,2,'Sedang')" data-level="mid">😤 Sedang<br><small>4×2</small></button>
+      <button class="level-btn" onclick="startMemory(4,3,'Sulit')" data-level="hard">😈 Sulit<br><small>4×3</small></button>
+    </div>
+  </div>
+  <div id="mem-game-area" style="display:none">
+    <div class="mem-info-bar">
+      <span id="mem-level-label">Mudah</span>
+      <div class="mem-progress-wrap"><div class="mem-progress" id="mem-progress"></div></div>
+      <button class="restart-btn" onclick="resetMemory()">🔄 Restart</button>
+    </div>
+    <div id="mem-board" class="mem-board"></div>
+  </div>
+</div>
+
+<!-- ===== TIC TAC TOE PAGE ===== -->
+<div id="page-tictactoe" class="page">
+  <div class="game-header">
+    <button class="back-btn" onclick="showPage('home'); playClick()">← Back</button>
+    <h2>❌⭕ Tic Tac Toe</h2>
+    <div class="game-stats">
+      <span>X: <span id="ttt-score-x">0</span></span>
+      <span>⭕: <span id="ttt-score-o">0</span></span>
+      <span>🤝: <span id="ttt-score-draw">0</span></span>
+    </div>
+  </div>
+  <div class="ttt-mode-select" id="ttt-mode-select">
+    <h3>Pilih Mode</h3>
+    <div class="mode-btns">
+      <button class="mode-btn" onclick="startTTT('friend')">👥 Lawan Teman</button>
+      <button class="mode-btn" onclick="startTTT('bot')">🤖 Lawan Bot</button>
+    </div>
+  </div>
+  <div id="ttt-game-area" style="display:none">
+    <div id="ttt-turn-label" class="turn-label"></div>
+    <div id="ttt-board" class="ttt-board"></div>
+    <button class="restart-btn" onclick="resetTTT()">🔄 Main Lagi</button>
+  </div>
+</div>
+
+<!-- ===== TEBAK ANGKA PAGE ===== -->
+<div id="page-tebakangka" class="page">
+  <div class="game-header">
+    <button class="back-btn" onclick="showPage('home'); playClick()">← Back</button>
+    <h2>🔢 Tebak Angka</h2>
+    <div class="game-stats">
+      <span>🏆 <span id="ta-best">0</span></span>
+    </div>
+  </div>
+  <div class="ta-container">
+    <div class="ta-lives" id="ta-lives"></div>
+    <div class="ta-score-display">Score: <span id="ta-score">0</span></div>
+    <div class="ta-question">
+      <p>Tebak angka antara <strong>1</strong> sampai <strong>100</strong></p>
+      <div class="ta-hint" id="ta-hint"></div>
+    </div>
+    <div class="ta-input-row">
+      <input type="number" id="ta-input" min="1" max="100" placeholder="Masukkan angka..." />
+      <button class="game-btn" onclick="checkGuess()">Tebak!</button>
+    </div>
+    <button class="restart-btn" onclick="startTebakAngka()">🔄 Main Baru</button>
+  </div>
+</div>
+
+<!-- ===== ROCK PAPER SCISSORS PAGE ===== -->
+<div id="page-rps" class="page">
+  <div class="game-header">
+    <button class="back-btn" onclick="showPage('home'); playClick()">← Back</button>
+    <h2>✊ Rock Paper Scissors</h2>
+    <div class="game-stats">
+      <span>🏆 <span id="rps-win">0</span></span>
+      <span>💔 <span id="rps-lose">0</span></span>
+      <span>🤝 <span id="rps-draw">0</span></span>
+    </div>
+  </div>
+  <div class="rps-container">
+    <div class="rps-arena">
+      <div class="rps-side">
+        <p>Kamu</p>
+        <div class="rps-emoji" id="rps-player-emoji">❓</div>
+      </div>
+      <div class="rps-vs">VS</div>
+      <div class="rps-side">
+        <p>Bot</p>
+        <div class="rps-emoji" id="rps-bot-emoji">❓</div>
+      </div>
+    </div>
+    <div class="rps-result" id="rps-result"></div>
+    <div class="rps-choices">
+      <button class="rps-btn" onclick="playRPS('rock')">✊<span>Batu</span></button>
+      <button class="rps-btn" onclick="playRPS('paper')">✋<span>Kertas</span></button>
+      <button class="rps-btn" onclick="playRPS('scissors')">✌️<span>Gunting</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SNAKE GAME PAGE ===== -->
+<div id="page-snake" class="page">
+  <div class="game-header">
+    <button class="back-btn" onclick="showPage('home'); stopSnake(); playClick()">← Back</button>
+    <h2>🐍 Snake Game</h2>
+    <div class="game-stats">
+      <span>Score: <span id="snake-score">0</span></span>
+      <span>🏆 <span id="snake-best">0</span></span>
+    </div>
+  </div>
+  <div class="snake-container">
+    <canvas id="snake-canvas" width="400" height="400"></canvas>
+    <div id="snake-overlay" class="snake-overlay">
+      <div class="snake-overlay-content">
+        <div class="overlay-icon">🐍</div>
+        <h3 id="snake-overlay-title">Snake Game</h3>
+        <p id="snake-overlay-msg">Gunakan tombol panah / WASD untuk bermain</p>
+        <button class="game-btn" onclick="startSnake()">▶ Mulai</button>
+      </div>
+    </div>
+    <div class="snake-dpad" id="snake-dpad">
+      <button class="dpad-btn" onclick="snakeDirChange('up')">▲</button>
+      <div class="dpad-row">
+        <button class="dpad-btn" onclick="snakeDirChange('left')">◀</button>
+        <div class="dpad-center">⬛</div>
+        <button class="dpad-btn" onclick="snakeDirChange('right')">▶</button>
+      </div>
+      <button class="dpad-btn" onclick="snakeDirChange('down')">▼</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CATCH THE OBJECT PAGE ===== -->
+<div id="page-catch" class="page">
+  <div class="game-header">
+    <button class="back-btn" onclick="showPage('home'); stopCatch(); playClick()">← Back</button>
+    <h2>🍎 Catch The Object</h2>
+    <div class="game-stats">
+      <span>Score: <span id="catch-score">0</span></span>
+      <span>Level: <span id="catch-level">1</span></span>
+      <span id="catch-lives-display"></span>
+    </div>
+  </div>
+  <div class="catch-container">
+    <canvas id="catch-canvas" width="400" height="500"></canvas>
+    <div id="catch-overlay" class="catch-overlay">
+      <div class="catch-overlay-content">
+        <div class="overlay-icon">🍎</div>
+        <h3 id="catch-overlay-title">Catch The Object</h3>
+        <p id="catch-overlay-msg">Tangkap 🍎 hindari 💣<br>Gunakan ← → atau sentuh layar</p>
+        <button class="game-btn" onclick="startCatch()">▶ Mulai</button>
+      </div>
+    </div>
+    <div class="catch-mobile-controls" id="catch-mobile-controls">
+      <button class="catch-ctrl-btn" id="catch-left-btn">◀</button>
+      <button class="catch-ctrl-btn" id="catch-right-btn">▶</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== POPUP OVERLAY ===== -->
+<div id="popup-overlay" class="popup-overlay" onclick="closePopup()">
+  <div class="popup-box" onclick="event.stopPropagation()">
+    <div class="popup-icon" id="popup-icon">🎉</div>
+    <h2 id="popup-title">Title</h2>
+    <p id="popup-message">Message</p>
+    <div class="popup-actions">
+      <button class="game-btn" id="popup-btn1" onclick="closePopup()">OK</button>
+      <button class="game-btn secondary" id="popup-btn2" style="display:none">Play Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONFETTI CANVAS ===== -->
+<canvas id="confetti-canvas" style="position:fixed;top:0;left:0;pointer-events:none;z-index:9999;width:100%;height:100%"></canvas>
+
+<script src="game.js"></script>
+</body>
+</html>
