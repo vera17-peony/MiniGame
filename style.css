@@ -272,6 +272,11 @@ body::after {
   gap: 8px;
   transition: var(--transition);
   text-shadow: 0 0 20px rgba(199, 125, 255, 0.6);
+  width: 140px;
+}
+
+.nav-logo > span {
+  font-size: 1rem;
 }
 
 .nav-logo span {
@@ -368,7 +373,7 @@ body::after {
 
 .hero-title-text {
   font-family: var(--font-display);
-  font-size: clamp(0.75rem, 8vw, 5rem) !important;
+  font-size: clamp(2.5rem, 8vw, 5rem);
   background: linear-gradient(
     135deg,
     var(--accent-pink) 0%,
